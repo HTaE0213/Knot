@@ -97,6 +97,9 @@
     <string name="profile_ts_mid_copied">MIDをコピーしました</string>
     <!-- Chat options -->
     <string name="opt_high_quality_photo_label">写真の送信品質を向上</string>
+    <string name="opt_hide_incoming_images_label">受信画像をタップするまで隠す</string>
+    <string name="opt_hide_incoming_images_desc">相手から送られた写真をDiscordのネタバレ表示のように隠します。カバーを1回タップすると表示します。自分が送信した写真・動画・スタンプ・リンクプレビューには適用しません。</string>
+    <string name="image_spoiler_tap_to_reveal">タップして表示</string>
     <string name="opt_high_quality_photo_desc">写真送信時の自動圧縮・リサイズを回避し、最高品質で送信できるようにします。設定の「高画質」よりもさらに高品質な送信が可能になります。</string>
     <string name="opt_long_video_label">5分以上の動画を送信可能にする</string>
     <string name="opt_long_video_desc">動画送信時の5分の時間制限を解除し、長い動画を送信できるようにします。</string>
