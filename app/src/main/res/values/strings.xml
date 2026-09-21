@@ -114,6 +114,9 @@
 
     <!-- Chat options -->
     <string name="opt_high_quality_photo_label">Improve photo send quality</string>
+    <string name="opt_hide_incoming_images_label">Hide received images until tapped</string>
+    <string name="opt_hide_incoming_images_desc">Hides photos sent by other people behind a Discord-style spoiler. Tap the cover once to reveal the photo. Your own sent photos, videos, stickers, and link previews are not affected.</string>
+    <string name="image_spoiler_tap_to_reveal">Tap to reveal</string>
     <string name="opt_high_quality_photo_desc">Skips the automatic compression and resizing applied when sending photos, so they are sent at maximum quality — better than LINE\'s own \"High quality\" setting.</string>
     <string name="opt_long_video_label">Allow videos longer than 5 minutes</string>
     <string name="opt_long_video_desc">Removes the 5-minute limit on video uploads so you can send longer videos.</string>

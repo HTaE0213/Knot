@@ -159,6 +159,7 @@ public class Main extends XposedModule {
       applyHook(new OpenInExternalBrowserHook(), lpparam);
     }
     if (options.highQualityPhoto.enabled) applyHook(new ImageQuality(), lpparam);
+    if (options.hideIncomingImages.enabled) applyHook(new IncomingImageSpoilerHook(), lpparam);
     if (options.longVideo.enabled) applyHook(new LongVideoHook(), lpparam);
     if (options.searchByMember.enabled) applyHook(new SearchByMemberHook(), lpparam);
     if (options.searchMin1Char.enabled) {

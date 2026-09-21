@@ -97,6 +97,9 @@
     <string name="profile_ts_mid_copied">已複製MID</string>
     <!-- Chat options -->
     <string name="opt_high_quality_photo_label">提升照片傳送品質</string>
+    <string name="opt_hide_incoming_images_label">點擊前隱藏收到的圖片</string>
+    <string name="opt_hide_incoming_images_desc">將其他人傳送的照片以類似Discord防雷的方式隱藏。點擊遮罩一次即可顯示。自己傳送的照片、影片、貼圖與連結預覽不受影響。</string>
+    <string name="image_spoiler_tap_to_reveal">點擊以顯示</string>
     <string name="opt_high_quality_photo_desc">略過傳送照片時的自動壓縮與縮放，以最高品質傳送。品質比LINE設定中的「高畫質」更好。</string>
     <string name="opt_long_video_label">允許傳送5分鐘以上的影片</string>
     <string name="opt_long_video_desc">解除傳送影片時的5分鐘限制，讓你可以傳送較長的影片。</string>
