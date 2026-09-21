@@ -1,0 +1,29 @@
+name: Build APK (temporary)
+
+on:
+  pull_request:
+    branches:
+      - feat/incoming-image-spoiler
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Build debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew spotlessCheck assembleDebug --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Knot-image-spoiler-debug
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
