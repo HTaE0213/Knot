@@ -35,7 +35,7 @@
     <string name="sec_chat_send">送信</string>
     <string name="sec_chat_media">メディア</string>
     <string name="opt_hide_incoming_images_label">受信画像をタップするまで隠す</string>
-    <string name="opt_hide_incoming_images_desc">受信した写真のサムネイルをタップするまで隠します。送信画像・動画・スタンプは原則対象外です。有効化後はLINEを再起動してください。</string>
+    <string name="opt_hide_incoming_images_desc">トーク内の受信写真サムネイルをタップするまで隠します。通知やアルバム画面は対象外です。有効化後はLINEを再起動してください。</string>
     <string name="image_spoiler_loading">画像を確認中…</string>
     <string name="image_spoiler_tap_to_reveal">タップして表示</string>
     <string name="sec_chat_search">検索</string>

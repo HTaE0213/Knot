@@ -40,7 +40,7 @@
     <string name="sec_chat_send">Sending</string>
     <string name="sec_chat_media">Media</string>
     <string name="opt_hide_incoming_images_label">Conceal received photos</string>
-    <string name="opt_hide_incoming_images_desc">Hide received photo thumbnails until tapped. Other media is not intentionally concealed. Restart LINE after enabling.</string>
+    <string name="opt_hide_incoming_images_desc">Hide received photos in chat until tapped. Notifications and gallery previews are not affected. Restart LINE after enabling.</string>
     <string name="image_spoiler_loading">Checking photo…</string>
     <string name="image_spoiler_tap_to_reveal">Tap to reveal</string>
     <string name="sec_chat_search">Search</string>

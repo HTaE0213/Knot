@@ -94,7 +94,8 @@ public class IncomingImageSpoilerHook implements BaseHook {
         || blank(cfg.unsend.methodBind)
         || blank(cfg.unsend.methodGetItemView)
         || blank(cfg.unsend.methodGetCommonData)
-        || blank(cfg.unsend.chatMessageIdField)) {
+        || (blank(cfg.unsend.chatMessageIdField)
+            && blank(cfg.unsend.chatMessageServerIdLongField))) {
       Knot.log("Knot: Image spoiler skipped: message holder mapping is unavailable");
       return;
     }
@@ -155,9 +156,16 @@ public class IncomingImageSpoilerHook implements BaseHook {
               try {
                 LOOKUP.execute(
                     () -> {
-                      boolean incoming = isIncomingPhoto(id);
+                      boolean incoming;
+                      try {
+                        incoming = isIncomingPhoto(id);
+                      } catch (Throwable e) {
+                        Knot.log("Knot: Image spoiler lookup error: " + e);
+                        incoming = false;
+                      }
                       imageCache.put(id, incoming);
-                      root.post(() -> resolve(root, state, incoming));
+                      final boolean result = incoming;
+                      root.post(() -> resolve(root, state, result));
                     });
               } catch (RuntimeException e) {
                 Knot.log("Knot: Image spoiler lookup rejected: " + e);
