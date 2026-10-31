@@ -34,6 +34,10 @@
     <string name="sec_privacy_profile">個人檔案</string>
     <string name="sec_chat_send">傳送</string>
     <string name="sec_chat_media">媒體</string>
+    <string name="opt_hide_incoming_images_label">點擊前隱藏收到的照片</string>
+    <string name="opt_hide_incoming_images_desc">點擊前隱藏聊天室收到的照片縮圖，不含通知或相簿預覽。啟用後請重新啟動 LINE。</string>
+    <string name="image_spoiler_loading">確認照片中…</string>
+    <string name="image_spoiler_tap_to_reveal">點擊顯示</string>
     <string name="sec_chat_search">搜尋</string>
     <string name="sec_chat_display">顯示</string>
     <string name="sec_ads">廣告與推薦</string>
