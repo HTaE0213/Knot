@@ -35,6 +35,10 @@
     <string name="sec_chat_camera">カメラ</string>
     <string name="sec_chat_search">検索</string>
     <string name="sec_chat_room">トークルーム</string>
+    <string name="opt_hide_incoming_images_label">受信画像をタップするまで隠す</string>
+    <string name="opt_hide_incoming_images_desc">トーク内の受信写真サムネイルをタップするまで隠します。通知やアルバム画面は対象外です。有効化後はLINEを再起動してください。</string>
+    <string name="image_spoiler_loading">画像を確認中…</string>
+    <string name="image_spoiler_tap_to_reveal">タップして表示</string>
     <string name="sec_ads_home">広告・ホーム</string>
     <string name="sec_tabs">タブ</string>
     <string name="sec_header_btn">ヘッダボタン</string>
