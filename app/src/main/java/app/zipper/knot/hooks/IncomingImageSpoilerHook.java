@@ -45,8 +45,7 @@ public class IncomingImageSpoilerHook implements BaseHook {
   private static final float MIN_IMAGE_DP = 72f;
   private static final int MAX_CACHE = 2048;
   private static final ThreadPoolExecutor LOOKUP =
-      new ThreadPoolExecutor(
-          1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(96));
+      new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(96));
 
   private static final Map<String, Boolean> imageCache =
       Collections.synchronizedMap(
@@ -199,7 +198,8 @@ public class IncomingImageSpoilerHook implements BaseHook {
         cover.setFocusable(true);
         cover.setContentDescription(ModuleResources.get(R.string.image_spoiler_tap_to_reveal));
         FrameLayout.LayoutParams lp =
-            new FrameLayout.LayoutParams(bounds.width(), bounds.height(), Gravity.TOP | Gravity.LEFT);
+            new FrameLayout.LayoutParams(
+                bounds.width(), bounds.height(), Gravity.TOP | Gravity.LEFT);
         lp.leftMargin = bounds.left;
         lp.topMargin = bounds.top;
         host.addView(cover, lp);
@@ -241,11 +241,12 @@ public class IncomingImageSpoilerHook implements BaseHook {
     }
     for (Cover entry : state.covers) {
       entry.label.setText(ModuleResources.get(R.string.image_spoiler_tap_to_reveal));
-      entry.label.setOnClickListener(v -> {
-        if (!state.id.equals(root.getTag(MESSAGE_TAG))) return;
-        revealed.add(state.id);
-        clear(root);
-      });
+      entry.label.setOnClickListener(
+          v -> {
+            if (!state.id.equals(root.getTag(MESSAGE_TAG))) return;
+            revealed.add(state.id);
+            clear(root);
+          });
     }
   }
 
@@ -286,11 +287,17 @@ public class IncomingImageSpoilerHook implements BaseHook {
     try (SQLiteDatabase db =
         SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY)) {
       Boolean byServer =
-          lookup(db, "SELECT attachement_type, parameter, from_mid FROM chat_history WHERE server_id = ? LIMIT 1", id);
+          lookup(
+              db,
+              "SELECT attachement_type, parameter, from_mid FROM chat_history WHERE server_id = ? LIMIT 1",
+              id);
       if (byServer != null) return byServer;
       if (decimal(id)) {
         Boolean byRow =
-            lookup(db, "SELECT attachement_type, parameter, from_mid FROM chat_history WHERE id = ? LIMIT 1", id);
+            lookup(
+                db,
+                "SELECT attachement_type, parameter, from_mid FROM chat_history WHERE id = ? LIMIT 1",
+                id);
         if (byRow != null) return byRow;
       }
     } catch (Throwable e) {
