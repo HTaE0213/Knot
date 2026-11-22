@@ -1,0 +1,74 @@
+name: Build Knot Spoiler APK
+
+on:
+  push:
+    branches:
+      - feat/incoming-image-spoiler-v3
+    paths:
+      - '.github/workflows/build-spoiler-apk.yml'
+      - 'app/**'
+      - 'gradle/**'
+      - 'gradle.properties'
+      - 'settings.gradle'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: knot-spoiler-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build installable debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # The upstream repository omits gradle-wrapper.jar; use an explicit
+      # Gradle version matching gradle/wrapper/gradle-wrapper.properties.
+      - name: Set up Gradle 9.7.0
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.7.0'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Install Android SDK for compileSdk 37
+        shell: bash
+        run: |
+          sdkmanager --install 'platforms;android-37' 'build-tools;36.0.0'
+
+      - name: Assemble debug APK
+        run: gradle --no-daemon :app:assembleDebug --stacktrace
+
+      - name: Verify APK and show SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          apks=(app/build/outputs/apk/debug/*.apk)
+          test "${#apks[@]}" -gt 0
+          sha256sum "${apks[@]}"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Knot-v3.1.2-image-spoiler-debug-${{ github.run_number }}
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Validate Java formatting
+        run: gradle --no-daemon :app:spotlessCheck
