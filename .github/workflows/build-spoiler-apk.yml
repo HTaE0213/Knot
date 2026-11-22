@@ -48,7 +48,7 @@ jobs:
       - name: Install Android SDK for compileSdk 37
         shell: bash
         run: |
-          sdkmanager --install 'platforms;android-37' 'build-tools;36.0.0'
+          sdkmanager --install 'platforms;android-37.0' 'build-tools;36.0.0'
 
       - name: Assemble debug APK
         run: gradle --no-daemon :app:assembleDebug --stacktrace
