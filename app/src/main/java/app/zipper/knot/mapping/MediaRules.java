@@ -9,11 +9,14 @@ import org.luckypray.dexkit.query.enums.UsingType;
 import org.luckypray.dexkit.query.matchers.ClassMatcher;
 import org.luckypray.dexkit.query.matchers.FieldMatcher;
 import org.luckypray.dexkit.query.matchers.MethodMatcher;
+import org.luckypray.dexkit.result.FieldData;
+import org.luckypray.dexkit.result.MethodData;
 
 final class MediaRules {
 
   static final Mappings.Section[] SECTIONS = {
     MediaRules::callTone,
+    MediaRules::callRecording,
     MediaRules::camera,
     MediaRules::font,
     MediaRules::imageQuality,
@@ -65,6 +68,62 @@ final class MediaRules {
                     MethodMatcher.create()
                         .name("<init>")
                         .paramTypes("android.content.Context", source)));
+  }
+
+  private static void callRecording(Finder f, LineVersion.Config c) {
+    if (f.id("raw", "recording_jp_start") == 0) return;
+
+    String features = f.classUsing("FEATURE_STATE_SHARE");
+    FieldData stateShare = f.fieldData(features, FieldMatcher.create().name("FEATURE_STATE_SHARE"));
+    if (stateShare != null) {
+      for (MethodData reader : stateShare.getReaders()) {
+        if (reader.isConstructor() && !reader.getClassName().equals(features)) {
+          c.callRecording.stateShareClass = reader.getClassName();
+          break;
+        }
+      }
+    }
+    String share = c.callRecording.stateShareClass;
+    // R8 drops the state argument from 26.18.2, leaving a setter for "record" only
+    List<MethodData> recordOnly =
+        f.declaredMethods(
+            share,
+            sig("void")
+                .modifiers(Modifier.PUBLIC)
+                .usingEqStrings("record", "modelImpl")
+                .addInvoke(MethodMatcher.create().declaredClass("java.util.Map").name("put")));
+    c.callRecording.methodSetState =
+        recordOnly.size() == 1
+            ? recordOnly.get(0).getName()
+            : f.method(
+                share,
+                MethodMatcher.create()
+                    .modifiers(Modifier.PUBLIC)
+                    .returnType("void")
+                    .paramCount(1)
+                    .addUsingString("modelImpl")
+                    .addInvoke(
+                        MethodMatcher.create().name("getName").returnType("java.lang.String")));
+
+    String player =
+        f.classUsingId(
+            MethodMatcher.create().name("<init>").paramTypes("android.content.Context"),
+            "raw",
+            "recording_jp_start");
+    if (player.isEmpty()) return;
+    c.callRecording.voiceGuideClass =
+        f.clsIn(
+            Finder.packageOf(player),
+            ClassMatcher.create()
+                .addMethod(MethodMatcher.create().name("<init>").paramTypes(player))
+                .addMethod(MethodMatcher.create().name("getState")));
+    // The start and end guides have the same shape, so which is which is left unresolved
+    List<MethodData> guides =
+        f.declaredMethods(c.callRecording.voiceGuideClass, sig("void").modifiers(Modifier.PUBLIC));
+    if (guides.size() == 2) {
+      c.callRecording.methodGuideA = guides.get(0).getName();
+      c.callRecording.methodGuideB = guides.get(1).getName();
+    }
   }
 
   private static void camera(Finder f, LineVersion.Config c) {
@@ -245,18 +304,14 @@ final class MediaRules {
                         .addField(FieldMatcher.create().name("DARK"))));
 
     // LINE sets AppCompat's default night mode from its ConfigureNightModeTask
+    MethodMatcher applyNightMode = sig("void", "boolean").modifiers(Modifier.STATIC);
     c.nightMode.nightModeConfiguratorClass =
-        f.cls(
-            ClassMatcher.create()
-                .fieldCount(1)
-                .addMethod(
-                    sig("void", "boolean")
-                        .modifiers(Modifier.STATIC)
-                        .addCaller(
-                            MethodMatcher.create()
-                                .declaredClass(
-                                    ClassMatcher.create()
-                                        .usingEqStrings("ConfigureNightModeTask")))));
+        f.classAmong(
+            Finder.invokedClasses(
+                f.methodData(
+                    f.classUsing("ConfigureNightModeTask"),
+                    MethodMatcher.create().addInvoke(applyNightMode))),
+            ClassMatcher.create().fieldCount(1).addMethod(applyNightMode));
     c.nightMode.fieldSystemDarkMode = f.fieldOf(c.nightMode.nightModeConfiguratorClass, "boolean");
     c.nightMode.methodApplyNightMode =
         f.staticMethodOf(c.nightMode.nightModeConfiguratorClass, "void", "boolean");

@@ -25,7 +25,7 @@
     <string name="cat_privacy">Privacy</string>
     <string name="cat_chat">Chat</string>
     <string name="cat_display">Appearance</string>
-    <string name="cat_notification">Notifications</string>
+    <string name="cat_notification">Notifications &amp; Calls</string>
     <string name="cat_storage">Storage</string>
     <string name="cat_backup">Backup</string>
     <string name="cat_system">System</string>
@@ -33,23 +33,25 @@
 
     <!-- Sections -->
     <string name="sec_privacy_read">Read receipts</string>
-    <string name="sec_privacy_edit">Message editing</string>
-    <string name="sec_privacy_hide">Hidden chats</string>
-    <string name="sec_privacy_unsend">Unsend</string>
+    <string name="sec_privacy_chat_list">Chat list</string>
+    <string name="sec_privacy_message">Messages</string>
     <string name="sec_privacy_profile">Profile</string>
     <string name="sec_chat_send">Sending</string>
-    <string name="sec_chat_media">Media</string>
+    <string name="sec_chat_camera">Camera</string>
+    <string name="sec_chat_search">Search</string>
+    <string name="sec_chat_room">Chat room</string>
     <string name="opt_hide_incoming_images_label">Conceal received photos</string>
     <string name="opt_hide_incoming_images_desc">Hide received photos in chat until tapped. Notifications and gallery previews are not affected. Restart LINE after enabling.</string>
     <string name="image_spoiler_loading">Checking photo…</string>
     <string name="image_spoiler_tap_to_reveal">Tap to reveal</string>
-    <string name="sec_chat_search">Search</string>
-    <string name="sec_chat_display">Display</string>
-    <string name="sec_ads">Ads and recommendations</string>
+    <string name="sec_ads_home">Ads and Home</string>
     <string name="sec_tabs">Tabs</string>
     <string name="sec_header_btn">Header buttons</string>
+    <string name="sec_ai">AI</string>
     <string name="sec_font">Font</string>
     <string name="sec_theme">Theme</string>
+    <string name="sec_notification_message">Message notifications</string>
+    <string name="sec_notification_delivery">Notification delivery</string>
     <string name="sec_call">Calls</string>
 
     <!-- Restart / warnings -->
@@ -112,6 +114,10 @@
     <string name="opt_prevent_mark_as_read_desc">Lets you turn read avoidance on and off from the \"+\" menu at the top right of the Chats tab. When it is on, \"Mark read after sending\" and \"Mark read after reacting\" options appear as well.</string>
     <string name="opt_record_read_history_label">Record read history</string>
     <string name="opt_record_read_history_desc">Records who read each message and when. Open it from the book icon at the top of the chat screen.</string>
+    <string name="opt_enable_scroll_preview_label">Enable scroll preview</string>
+    <string name="opt_enable_scroll_preview_desc">Re-enables the scroll preview feature that was removed from LINE Labs. Note: requires LINE 26.15.0 or later.</string>
+    <string name="opt_classic_chat_list_menu_label">Use the classic chat list long-press menu</string>
+    <string name="opt_classic_chat_list_menu_desc">Shows only the menu, without the chat preview, when you long-press a chat in the chat list. Has no effect while \"Enable scroll preview\" is on. Note: requires LINE 26.15.0 or later.</string>
 
     <string name="opt_permanent_hide_chat_label">Permanently hide chats</string>
     <string name="opt_permanent_hide_chat_desc">Keeps hidden chats hidden even when new messages arrive. When it is on, a toggle to temporarily show them is added to the \"+\" menu at the top right of the Chats tab. While they are shown, you can unhide a chat with \"Unhide\" in its long-press menu.</string>
@@ -221,7 +227,11 @@
 
     <!-- Notification options -->
     <string name="opt_reaction_notification_label">Reaction notifications</string>
-    <string name="opt_reaction_notification_desc">Notifies you about reactions to your messages. Note: they are delivered when you open the app. If LINE is running as a foreground service, they arrive even while LINE is closed.</string>
+    <string name="opt_reaction_notification_desc">Notifies you about reactions to messages. Note: they are delivered when you open the app. If LINE is running as a foreground service, they arrive even while LINE is closed.</string>
+    <string name="opt_reaction_notification_target_label">Reaction notification target</string>
+    <string name="opt_reaction_notification_target_desc">Chooses which messages reaction notifications cover. All messages notifies for every message that gets a reaction. My messages only notifies for the messages you sent.</string>
+    <string name="reaction_notif_target_all">All messages</string>
+    <string name="reaction_notif_target_own">My messages only</string>
 
     <string name="opt_stack_message_notifications_label">Do not overwrite notifications</string>
     <string name="opt_stack_message_notifications_desc">Groups up to seven messages in a single notification instead of replacing the previous one.</string>
@@ -234,14 +244,13 @@
     <string name="opt_remove_notification_mute_button_desc">Removes the \"Mute\" action button from LINE notifications.</string>
 
     <string name="opt_experimental_fcm_fix_label" translatable="false">FCM Fix</string>
-    <string name="opt_experimental_fcm_fix_desc">Hands LINE\'s FCM notification handling directly to the service, working around notifications that stop arriving after about a minute on non-rooted devices.</string>
+    <string name="opt_experimental_fcm_fix_desc">Works around notifications not arriving on non-rooted devices.</string>
     <string name="opt_fcm_fix_mode_label" translatable="false">FCM Fix Mode</string>
     <string name="opt_fcm_fix_mode_desc">Chooses how FCM Fix works. Legacy (keep Legy) keeps LINE\'s own streaming connection alive to deliver notifications. FIS (certificate spoof) spoofs the signature as the official certificate when the FCM token is issued.</string>
     <string name="fcm_fix_mode_legy">Legacy (keep Legy)</string>
     <string name="fcm_fix_mode_fis">FIS (certificate spoof)</string>
     <string name="opt_fcm_force_registration_label">Re-register the FCM token</string>
     <string name="opt_fcm_force_registration_desc">Requests a new FCM token for LINE when notifications are not arriving.</string>
-    <string name="fcm_force_registration_needs_fix">Enable FCM Fix first</string>
     <string name="fcm_force_registration_started">Started re-registering the FCM token</string>
     <string name="fcm_force_registration_failed">Could not start FCM token re-registration</string>
     <string name="opt_line_foreground_keep_alive_label">Always run LINE as a foreground service</string>
@@ -252,6 +261,8 @@
     <string name="opt_use_custom_ringtone_desc">Plays the selected audio file as the ringtone for incoming LINE calls.</string>
     <string name="opt_custom_ringtone_path_label">Select a ringtone file</string>
     <string name="opt_custom_ringtone_path_desc">Choose the audio file to use as the ringtone.</string>
+    <string name="opt_silent_call_recording_label">Silent call recording</string>
+    <string name="opt_silent_call_recording_desc">Disables notifying the other party, onscreen recording indicators, and audio announcements when recording a call. Note: requires LINE 26.16.0 or later.</string>
     <string name="ringtone_editor_title">Ringtone</string>
     <string name="ringtone_editor_unsupported">This audio file can\'t be used.</string>
     <string name="ringtone_editor_save">Save</string>

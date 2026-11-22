@@ -1,6 +1,6 @@
-# Incoming photo spoiler — Knot 3.0.0 port
+# Incoming photo spoiler — Knot 3.1.2 port
 
-Based on upstream Knot v3.0.0 (2b-zipper/Knot commit `af7b87f`).
+Based on upstream Knot v3.0.0 (2b-zipper/Knot commit `863c721`).
 
 ## Implementation
 

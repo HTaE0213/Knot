@@ -20,6 +20,7 @@ import app.zipper.knot.SettingsStore;
 import app.zipper.knot.hooks.BackupRestoreHook;
 import app.zipper.knot.hooks.FcmFixHook;
 import app.zipper.knot.hooks.HomeTabTypeHook;
+import app.zipper.knot.hooks.ReactionNotification;
 import app.zipper.knot.mapping.Mappings;
 import app.zipper.knot.utils.LineTheme;
 import app.zipper.knot.utils.ModuleResources;
@@ -250,7 +251,7 @@ public final class SettingsPage {
                 ModuleResources.get(R.string.settings_reset_ok),
                 (d, w) -> {
                   Mappings.reset(ctx);
-                  dialog.promptRestart();
+                  dialog.onMappingsReset();
                 })
             .setNegativeButton(ModuleResources.get(R.string.settings_cancel), null)
             .show(),
@@ -296,6 +297,9 @@ public final class SettingsPage {
         case "fcm_fix_mode":
           addPickerRow(item, fcmFixModeLabel(), v -> openFcmFixModePicker(item));
           break;
+        case "reaction_notification_target":
+          addPickerRow(item, reactionTargetLabel(), v -> openReactionTargetPicker(item));
+          break;
         case "fcm_force_registration":
           addPickerRow(item, v -> forceFcmRegistration());
           break;
@@ -339,7 +343,37 @@ public final class SettingsPage {
 
   private void addPickerRow(
       KnotConfig.Item item, CharSequence value, View.OnClickListener onClick) {
-    row().title(item.label()).description(item.description()).value(value).onClick(onClick).add();
+    View row =
+        row()
+            .title(item.label())
+            .description(item.description())
+            .value(value)
+            .divider()
+            .onClick(
+                v -> {
+                  if (!isDisabled(item)) onClick.onClick(v);
+                })
+            .add();
+    if (row == null || !hasDependency(item)) return;
+    Runnable refreshState = () -> row.setAlpha(isDisabled(item) ? 0.5f : 1.0f);
+    dialog.addStateRefresher(refreshState);
+    refreshState.run();
+  }
+
+  private static boolean hasDependency(KnotConfig.Item item) {
+    return item.disabledWhenEnabledKey != null || item.requiredEnabledKey != null;
+  }
+
+  private static boolean isDisabled(KnotConfig.Item item) {
+    if (item.disabledWhenEnabledKey != null && isEnabled(item.disabledWhenEnabledKey)) {
+      return true;
+    }
+    return item.requiredEnabledKey != null && !isEnabled(item.requiredEnabledKey);
+  }
+
+  private static boolean isEnabled(String key) {
+    KnotConfig.Item item = Main.options.find(key);
+    return SettingsStore.get(key, item != null && item.defaultEnabled());
   }
 
   private void addToggleRow(KnotConfig.Item item) {
@@ -385,19 +419,18 @@ public final class SettingsPage {
   }
 
   private void applyDisabledState(View row, KnotConfig.Item item, LineVersion.Config cfg) {
-    if (item.disabledWhenEnabledKey == null) return;
-    boolean isDisabled = SettingsStore.get(item.disabledWhenEnabledKey, false);
+    if (!hasDependency(item)) return;
+    boolean isDisabled = isDisabled(item);
     row.setAlpha(isDisabled ? 0.5f : 1.0f);
     if (!isDisabled) return;
 
     Reflect.callMethod(row, cfg.settings.methodSetChecked, false);
-    if (!SettingsStore.get(item.key, false)) return;
+    if (!isEnabled(item.key)) return;
     saveItem(item.key, false);
   }
 
   private void toggleItem(View row, KnotConfig.Item item, LineVersion.Config cfg) {
-    if (item.disabledWhenEnabledKey != null
-        && SettingsStore.get(item.disabledWhenEnabledKey, false)) {
+    if (isDisabled(item)) {
       Reflect.callMethod(row, cfg.settings.methodSetChecked, false);
       return;
     }
@@ -420,10 +453,6 @@ public final class SettingsPage {
   }
 
   private void forceFcmRegistration() {
-    if (!SettingsStore.get("experimental_fcm_fix", false)) {
-      toast(ModuleResources.get(R.string.fcm_force_registration_needs_fix));
-      return;
-    }
     toast(
         FcmFixHook.requestFcmTokenRefresh(ctx.getClassLoader())
             ? ModuleResources.get(R.string.fcm_force_registration_started)
@@ -469,14 +498,14 @@ public final class SettingsPage {
   }
 
   private static String fcmFixMode() {
-    return SettingsStore.getString("fcm_fix_mode", FcmFixHook.MODE_LEGY);
+    return SettingsStore.getString("fcm_fix_mode", FcmFixHook.MODE_FIS);
   }
 
   private static String fcmFixModeLabel() {
     return ModuleResources.get(
-        FcmFixHook.MODE_FIS.equals(fcmFixMode())
-            ? R.string.fcm_fix_mode_fis
-            : R.string.fcm_fix_mode_legy);
+        FcmFixHook.MODE_LEGY.equals(fcmFixMode())
+            ? R.string.fcm_fix_mode_legy
+            : R.string.fcm_fix_mode_fis);
   }
 
   private void openFcmFixModePicker(KnotConfig.Item item) {
@@ -490,6 +519,30 @@ public final class SettingsPage {
     };
 
     showChoicePicker(item, values, labels, fcmFixMode());
+  }
+
+  private static String reactionTarget() {
+    return SettingsStore.getString("reaction_notification_target", ReactionNotification.TARGET_ALL);
+  }
+
+  private static String reactionTargetLabel() {
+    return ModuleResources.get(
+        ReactionNotification.TARGET_OWN.equals(reactionTarget())
+            ? R.string.reaction_notif_target_own
+            : R.string.reaction_notif_target_all);
+  }
+
+  private void openReactionTargetPicker(KnotConfig.Item item) {
+    List<String> values = new ArrayList<>();
+    values.add(ReactionNotification.TARGET_ALL);
+    values.add(ReactionNotification.TARGET_OWN);
+
+    String[] labels = {
+      ModuleResources.get(R.string.reaction_notif_target_all),
+      ModuleResources.get(R.string.reaction_notif_target_own)
+    };
+
+    showChoicePicker(item, values, labels, reactionTarget());
   }
 
   private void openHomeTypePicker(KnotConfig.Item item) {

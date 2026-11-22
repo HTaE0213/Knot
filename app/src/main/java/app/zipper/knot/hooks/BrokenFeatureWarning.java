@@ -127,6 +127,8 @@ public class BrokenFeatureWarning implements BaseHook {
         PlusMenuHook.class,
         ChatListMoreMenuHook.class);
     add(f, o.recordReadHistory, HeaderButtonInjector.class);
+    add(f, o.enableScrollPreview, ScrollPreviewHook.class);
+    add(f, o.classicChatListMenu, ScrollPreviewHook.class);
     add(f, o.showEditHistory, EditHistoryHook.class);
     add(
         f,
@@ -187,6 +189,7 @@ public class BrokenFeatureWarning implements BaseHook {
     add(f, o.lineForegroundKeepAlive, LineForegroundKeepAliveHook.class);
     add(f, o.disableCustomRingback, DisableCustomRingbackHook.class);
     add(f, o.useCustomRingtone, CustomRingtoneHook.class);
+    add(f, o.silentCallRecording, SilentCallRecordingHook.class);
     add(f, o.fixSignatureMismatch, SignatureSpoofHook.class);
     add(f, o.fixDowngradeCrash, RoomDowngradeHook.class);
     return f;

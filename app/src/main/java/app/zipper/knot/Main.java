@@ -177,6 +177,9 @@ public class Main extends XposedModule {
       applyHook(new HiddenChatRowHook(), lpparam);
     }
     if (options.enableMuteMessage.enabled) applyHook(new MuteMessageHook(), lpparam);
+    if (options.enableScrollPreview.enabled || options.classicChatListMenu.enabled) {
+      applyHook(new ScrollPreviewHook(), lpparam);
+    }
     if (options.useDefaultCamera.enabled) applyHook(new UseDefaultCameraHook(), lpparam);
     if (options.muteCameraShutter.enabled) applyHook(new CameraShutterMuteHook(), lpparam);
     if (options.showProfileTimestamps.enabled) later.add(ProfileTimestampsHook::new);
@@ -226,9 +229,12 @@ public class Main extends XposedModule {
     if (options.lineForegroundKeepAlive.enabled) {
       applyHook(new LineForegroundKeepAliveHook(), lpparam);
     }
+    applyHook(new GmsAvailabilityHook(), lpparam);
+    applyHook(new GoogleSignInRedirectHook(), lpparam);
     if (options.experimentalFcmFix.enabled) applyHook(new FcmFixHook(), lpparam);
     if (options.disableCustomRingback.enabled) applyHook(new DisableCustomRingbackHook(), lpparam);
     if (options.useCustomRingtone.enabled) applyHook(new CustomRingtoneHook(), lpparam);
+    if (options.silentCallRecording.enabled) applyHook(new SilentCallRecordingHook(), lpparam);
     if (options.spoofVersionUnsendOnly.enabled) applyHook(new VersionSpoof(), lpparam);
     if (options.fixSignatureMismatch.enabled) applyHook(new SignatureSpoofHook(), lpparam);
     if (options.fixDowngradeCrash.enabled) applyHook(new RoomDowngradeHook(), lpparam);
